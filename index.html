@@ -84,24 +84,24 @@
         // Initialize your custom widget with the received data
         // ...
 
-        // Example: Add a button that sends data to the parent to redirect within sb
-        const button = document.createElement('button');
-        button.textContent = 'To event';
-        button.addEventListener('click', () => {
-          window.top.postMessage({
-            type: 'wsdk-sb-set',
-            data: {
-              eventId: 12345666,
-			  // oddIds: [2828090326],
-            }
-          }, '*');
-        });
+      //  // Example: Add a button that sends data to the parent to redirect within sb
+     //   const button = document.createElement('button');
+      //  button.textContent = 'To event';
+     //   button.addEventListener('click', () => {
+     //     window.top.postMessage({
+     //       type: 'wsdk-sb-set',
+     //       data: {
+     //         eventId: 12345666,
+		//	  // oddIds: [2828090326],
+    //        }
+   //       }, '*');
+  //      });
 
-        container.appendChild(button);
+ //       container.appendChild(button);
       }
   // });
 
-   // Request initialization data from the parent
+       // Request initialization data from the parent
     window.top.postMessage({ type: 'wsdk-get-data' }, '*');
 	console.log('Handling wsdk-get-data:', event.data.wsdk-get-data);
 	 // Make sure the event has a type
@@ -110,7 +110,24 @@
        // return;
       }
 
-      // 
+      // Filter/handle based on event.data.type
+      switch (event.data.type) {
+        case 'wsdk-data':
+          console.log('Handling wsdk-data:', event.data.wsdk-data);
+          // Do something like redirect, update state, etc.
+          break;
+        case 'wsdk-get-data':
+          console.log('Handling wsdk-get-data:', event.data.wsdk-get-data);
+          break;		  
+		 case 'wsdk-update-height':
+          console.log('Handling wsdk-update-height:', event.data.wsdk-update-height);
+          break;
+		 case 'wsdk-sb-set':
+          console.log('Handling wsdk-sb-set:', event.data.wsdk-sb-set);
+          break;
+        default:
+          console.log('ℹ️ Unhandled message type:', event.data.type);
+      }
 });
   </script>
 
