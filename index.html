@@ -92,6 +92,7 @@
             type: 'wsdk-sb-set',
             data: {
               eventId: 12345666,
+			   oddIds: [2828090326],
             }
           }, '*');
         });
@@ -111,7 +112,7 @@
 
     if (!message || !message.type) {
         console.log("Received message with no type:", message);
-        return;
+   //     return;
     }
 
     switch(message.type) {
