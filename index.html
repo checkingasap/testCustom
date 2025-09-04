@@ -99,39 +99,8 @@
 
         container.appendChild(button);
       }
-//    });
+   });
 
-    // Request initialization data from the parent
-    window.top.postMessage({ type: 'wsdk-get-data' }, '*');
-	console.log('Handling wsdk-get-data:', event.data.wsdk-get-data);
-	
-	  // Optional: check origin for security
-    // if (event.origin !== "https://your-allowed-origin.com") return;
-
-    const message = event.data;
-
-    if (!message || !message.type) {
-        console.log("Received message with no type:", message);
-   //     return;
-    }
-
-    switch(message.type) {
-        case "wsdk-data":
-            console.log("wsdk-data message:", message);
-            break;
-        case "wsdk-get-data":
-            console.log("wsdk-get-data message:", message);
-            break;
-        case "wsdk-update-height":
-            console.log("Type 3 message:", message);
-            break;
-        case "wsdk-sb-set":
-            console.log("Type 4 message:", message);
-            break;
-        default:
-            console.log("Unknown message type:", message);
-    }
-});
   </script>
 
 		
