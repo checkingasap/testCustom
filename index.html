@@ -1,0 +1,64 @@
+<!-- iframe1.html -->
+<html>
+<head>
+    <style>
+
+        body {
+            background:red;
+        }
+        #myDIV{
+            background:yellow;
+            border:3px solid brown;
+            padding:50px;
+            margin:10px 0;
+        }
+		 button {
+			padding: 10px 20px;
+			border: none;
+			border-radius: 6px;
+			background-color: #007bff;
+			color: white;
+			cursor: pointer;
+			font-size: 16px;
+		}
+		button:hover {
+			background-color: #0056b3;
+		}
+    </style>
+
+<!--
+<script type="text/javascript" src="https://sb2wsdk-altenar2-stage.biahosted.com/altenarWSDK.js" data-nscript="afterInteractive"></script>
+-->
+
+</head>
+<body>
+
+<h1>Iframe random content with just an Event button</h1>
+
+<p>Click on the following "EventId" btn and update via postMessage the sb content! </p>
+<p>and log the postMessage in console</p>
+
+<div id="container"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('container');
+
+      const button = document.createElement('button');
+      button.textContent = 'EventId=10571659';
+      button.addEventListener('click', () => {
+        window.top.postMessage({
+         type: 'wsdk-sb-set',
+            data: {
+              eventId: 10571659,
+          }
+        }, '*');
+      });
+
+      container.appendChild(button);
+    });
+  </script>
+
+		
+</body>
+</html>
