@@ -57,6 +57,77 @@
 
       container.appendChild(button);
     });
+	
+	// up to this point was working and just logging when iframe's postMessage to sb was fired
+	
+	const container = document.querySelector('#content');
+
+    // Set up a ResizeObserver to notify the parent when the height changes
+    const observer = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        const { height } = entry.contentRect;
+        window.top.postMessage({ type: 'wsdk-update-height', data: { height } }, '*');
+      }
+    });
+
+    observer.observe(container);
+
+    // Listen for messages from the parent
+    window.addEventListener('message', (event) => {
+      const { type, data } = event.data;
+
+      if (type === 'wsdk-data') {
+        // Handle initialization data
+        const { eventId } = data;
+        console.log('Received initialization data:', { eventId });
+
+        // Initialize your custom widget with the received data
+        // ...
+
+        // Example: Add a button that sends data to the parent to redirect within sb
+        const button = document.createElement('button');
+        button.textContent = 'To event';
+        button.addEventListener('click', () => {
+          window.top.postMessage({
+            type: 'wsdk-sb-set',
+            data: {
+              eventId: 12345666,
+            }
+          }, '*');
+        });
+
+        container.appendChild(button);
+      }
+    });
+
+    // Request initialization data from the parent
+    window.top.postMessage({ type: 'wsdk-get-data' }, '*');
+	
+	 // Make sure the event has a type
+      if (!event.data || !event.data.type) {
+        console.warn('⚠️ Message without type received, ignoring.');
+       // return;
+      }
+
+      // Filter/handle based on event.data.type
+      switch (event.data.type) {
+        case 'wsdk-data':
+          console.log('Handling wsdk-data:', event.data.wsdk-data);
+          // Do something like redirect, update state, etc.
+          break;
+        case 'wsdk-get-data':
+          console.log('Handling wsdk-get-data:', event.data.wsdk-get-data);
+          break;		  
+		 case 'wsdk-update-height':
+          console.log('Handling wsdk-update-height:', event.data.wsdk-update-height);
+          break;
+		 case 'wsdk-sb-set':
+          console.log('Handling wsdk-sb-set:', event.data.wsdk-sb-set);
+          break;
+        default:
+          console.log('ℹ️ Unhandled message type:', event.data.type);
+      }
+	
   </script>
 
 		
