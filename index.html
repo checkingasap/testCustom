@@ -110,24 +110,7 @@
        // return;
       }
 
-      // Filter/handle based on event.data.type
-      switch (event.data.type) {
-        case 'wsdk-data':
-          console.log('Handling wsdk-data:', event.data.wsdk-data);
-          // Do something like redirect, update state, etc.
-          break;
-        case 'wsdk-get-data':
-          console.log('Handling wsdk-get-data:', event.data.wsdk-get-data);
-          break;		  
-		 case 'wsdk-update-height':
-          console.log('Handling wsdk-update-height:', event.data.wsdk-update-height);
-          break;
-		 case 'wsdk-sb-set':
-          console.log('Handling wsdk-sb-set:', event.data.wsdk-sb-set);
-          break;
-        default:
-          console.log('ℹ️ Unhandled message type:', event.data.type);
-      }
+      // 
 });
   </script>
 
