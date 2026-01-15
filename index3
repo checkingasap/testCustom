@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Events</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet" />
+  <!-- <script type="text/javascript" src="https://sb2wsdk-altenar2-stage.biahosted.com/altenarWSDK.js"></script> -->
+  
+  <style>
+    body {
+      background: #242424;
+      color: #f5f5f5;
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar, .filter-bar {
+      background: #151515;
+      display: flex;
+      align-items: center;
+      padding: 10px 24px;
+      font-weight: bold;
+      font-size: 18px;
+      flex-wrap: wrap;
+    }
+    .navbar-tab {
+      color: #aaa;
+      opacity: 0.85;
+      border-bottom: 2px solid transparent;
+      margin-right: 18px;
+      cursor: pointer;
+      transition: color 0.18s, border-bottom 0.18s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .navbar-tab.active {
+      color: #fff;
+      border-bottom: 2px solid #ff8800;
+      opacity: 1;
+      font-weight: 700;
+    }
+    /* MARKET HEADER BUTTONS */
+    .markets-header {
+      display: flex;
+      gap: 18px;
+      margin: 12px 8px 24px 8px;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 17px;
+    }
+    .market-header-btn {
+      background: #292929;
+      color: #bbb;
+      border: none;
+      padding: 7px 28px;
+      border-radius: 7px;
+      font-weight: bold;
+      font-size: 17px;
+      transition: background 0.16s, color 0.16s;
+      cursor: pointer;
+    }
+    .market-header-btn.active {
+      background: #ff8800;
+      color: #fff;
+    }
+    /* MOBILE MARKETS HEADER */
+    .markets-header-mobile {
+      display: none;
+      margin: 10px 8px 10px 8px;
+    }
+    .markets-header-mobile select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 7px;
+      font-weight: bold;
+      background: #292929;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+    .event-list {
+      margin: 22px 6px 0 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .event-card {
+      background: #323232;
+      border-radius: 11px;
+      padding: 16px 16px 9px 16px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.16);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .event-card:hover {
+      background: #363943;
+    }
+    .event-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 2px;
+      flex-wrap: wrap;
+      font-size: 13.5px;
+      color: #aaa;
+    }
+    .event-header .league-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .country-flag {
+      width: 18px;
+      height: 12px;
+      border-radius: 2px;
+      object-fit: cover;
+      user-select: none;
+    }
+    .event-title {
+      font-weight: 700;
+      font-size: 17px;
+      color: #fff;
+      margin-bottom: 1px;
+      margin-top: 5px;
+    }
+    .event-competitors {
+      font-size: 17px;
+      font-weight: 400;
+      color: #ddd;
+      margin-bottom: 8px;
+      white-space: pre-line;
+    }
+    .markets-block {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin-top: 0;
+    }
+    .market-group {
+      display: flex;
+      background: none;
+      gap: 8px;
+      padding: 0;
+    }
+    .market-group:not(:last-child) {
+      margin-right: 0;
+    }
+    .odd-btn {
+      background: #393939;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 20px;
+      font-weight: bold;
+      color: #fff;
+      font-size: 17px;
+      min-width: 62px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-right: 0;
+      transition: background 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+      box-shadow: none;
+      outline: none;
+    }
+    .odd-btn:not(:last-child) {
+      margin-right: 7px;
+    }
+    .odd-btn:hover, .odd-btn:focus {
+      background: #222246;
+      color: #fff;
+      box-shadow: 0 0 0 2px #399efd44;
+    }
+    .odd-btn:active {
+      background: #146ad2;
+      color: #fff;
+    }
+    .odd-label {
+      font-size: 13px;
+      color: #bbb;
+      margin-bottom: 3px;
+    }
+    .market-group + .market-group {
+      margin-left: 28px;
+    }
+    @media (max-width: 950px) {
+      .markets-header {
+        font-size: 15px;
+        gap: 10px;
+      }
+      .market-header-btn {
+        padding: 4px 14px;
+        font-size: 15px;
+      }
+    }
+    @media (max-width: 650px) {
+      .markets-header {
+        display: none;
+      }
+      .markets-header-mobile {
+        display: block;
+      }
+      .markets-block {
+        flex-direction: column;
+        gap: 21px;
+      }
+      .market-group {
+        gap: 7px;
+      }
+      .market-group:not(:first-child) {
+        display: none;
+      }
+      .odd-btn {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- add oddIsAA - test
+<button type="button" class="button button3" onclick="window.altenarWSDK.set({oddIds: [3093134914]})">oddIs 3093134914</button>
+<div id="WBetSlip">BetSlip</div>
+-->
+
+  <div class="navbar">
+    <span class="navbar-tab active" id="football-tab"><span style="font-size:18px;">⚽</span> Football</span>
+    <span class="navbar-tab" id="basketball-tab"><span style="font-size:18px;">🏀</span> Basketball</span>
+  </div>
+  <!-- Desktop Market Header -->
+  <div class="markets-header" id="markets-header">
+    <!-- market header buttons dynamically inserted -->
+  </div>
+  <!-- Mobile Market Header -->
+  <div class="markets-header-mobile" id="markets-header-mobile">
+    <select id="mobile-market-select"></select>
+  </div>
+  <div class="event-list" id="event-list"></div>
+  
+  
+  <script>
+    
+  
+    // URLs: 66 football, 67 basketball
+    const FOOTBALL_URL = 'https://sb2frontend-rest-altenar2-stage.biahosted.com/api/v1/events?sportId=66&culture=en-GB';
+    const BASKETBALL_URL = 'https://sb2frontend-rest-altenar2-stage.biahosted.com/api/v1/events?sportId=67&culture=en-GB';
+
+    // Use these for market name mapping
+    const DEFAULT_MARKETS = ["1X2", "Draw no bet", "Totals"];
+
+    let currentUrl = FOOTBALL_URL;
+    let allEvents = [];
+    let marketNames = [...DEFAULT_MARKETS];
+    let selectedMarketIndex = 0; // which market group to show
+    let activeTab = 'football'; // or 'basketball'
+
+    // Switching tabs reloads
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('football-tab').onclick = () => {
+        if (activeTab === 'football') return;
+        activeTab = 'football';
+        document.getElementById('football-tab').classList.add('active');
+        document.getElementById('basketball-tab').classList.remove('active');
+        loadEvents(FOOTBALL_URL);
+      };
+      document.getElementById('basketball-tab').onclick = () => {
+        if (activeTab === 'basketball') return;
+        activeTab = 'basketball';
+        document.getElementById('football-tab').classList.remove('active');
+        document.getElementById('basketball-tab').classList.add('active');
+        loadEvents(BASKETBALL_URL);
+      };
+      // Market header buttons and dropdown listeners handled in render
+      loadEvents(FOOTBALL_URL);
+    });
+
+    function loadEvents(url) {
+      document.getElementById('event-list').innerHTML = '<div style="padding:14px;">Loading events…</div>';
+      fetch(url, {
+        method: 'GET',
+        headers: {accept: 'application/json', 'x-Integration': 'alfabet'}
+      })
+      .then(res => res.json())
+      .then(response => {
+        allEvents = response.data ?? [];
+        // Build the set of unique market names across all events (for headers)
+        let foundMarkets = [];
+        allEvents.forEach(event => {
+          (event.markets || []).forEach(market => {
+            if (market.name && !foundMarkets.includes(market.name)) foundMarkets.push(market.name);
+          });
+        });
+        marketNames = foundMarkets.length ? foundMarkets : [...DEFAULT_MARKETS];
+        selectedMarketIndex = 0;
+        renderMarketsHeader();
+        renderEvents();
+      }).catch(e => {
+        document.getElementById('event-list').innerHTML =
+          `<div style="padding:18px;color:#e03c00;font-weight:bold;">Error loading events: ${e}</div>`;
+      });
+    }
+
+    function renderMarketsHeader() {
+      // Desktop buttons
+      const headerBar = document.getElementById('markets-header');
+      headerBar.innerHTML = marketNames.map((mkt, idx) =>
+        `<button class="market-header-btn${idx === selectedMarketIndex ? ' active' : ''}" data-midx="${idx}">${mkt}</button>`
+      ).join("");
+      headerBar.querySelectorAll('.market-header-btn').forEach(btn => {
+        btn.onclick = function() {
+          selectedMarketIndex = +this.getAttribute('data-midx');
+          renderMarketsHeader();
+          renderEvents();
+        }
+      });
+
+      // Mobile dropdown
+      const select = document.getElementById('mobile-market-select');
+      select.innerHTML = marketNames.map((mkt, idx) => `<option value="${idx}">${mkt}</option>`).join("");
+      select.value = selectedMarketIndex;
+      select.onchange = function() {
+        selectedMarketIndex = +this.value;
+        renderEvents();
+      };
+    }
+
+    function renderEvents() {
+      const container = document.getElementById('event-list');
+      container.innerHTML = "";
+      for (const event of allEvents) {
+        let competitors = event.competitors.map(c => c.name).join('\n');
+        let dateStr = event.startDate ? (new Date(event.startDate)).toLocaleString('en-GB', {day: '2-digit', month: '2-digit', hour: '2-digit', minute:'2-digit'}) : '';
+        let league = event.extraInfo || event.name || '';
+        let flagSrc = getFlag(event.categoryId);
+        // Only show one market group (selected one) per event
+        let market = (event.markets || []).find((m, idx) => m.name === marketNames[selectedMarketIndex] || idx===selectedMarketIndex);
+        container.innerHTML += `
+          <div class="event-card" data-event='${JSON.stringify({
+            eventId: event.eventId, 
+            name: event.name, 
+            competitors: event.competitors
+          })}'>
+            <div class="event-header">
+              <span>${dateStr}</span>
+              <span class="league-info">
+                <img src="${flagSrc}" class="country-flag" alt="flag"/>
+                <span>${league}</span>
+              </span>
+            </div>
+            <div class="event-title">${event.competitors[0]?.name ?? ''}</div>
+            <div class="event-competitors">${event.competitors.slice(1).map(c => c.name).join('\n')}</div>
+            <div class="markets-block">
+              ${market ? `<div class="market-group">
+                ${market.odds.map(odd => `
+                  <button class="odd-btn"
+                    data-odd='${JSON.stringify({oddId: odd.oddId, eventId:event.eventId, marketId:market.marketId})}'>
+                    <span class="odd-label">${odd.name}</span>
+                    <span>${Number(odd.price).toFixed(2)}</span>
+                  </button>
+                `).join('')}
+              </div>` : ''}
+            </div>
+          </div>
+        `;
+      }
+      document.querySelectorAll('.odd-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const data = JSON.parse(this.getAttribute('data-odd'));
+          console.log('Selection clicked:', data);
+		  <!-- Passes the user's click on WBetslip via set() -->
+		  window.altenarWSDK.set({ oddIds: [data.oddId] });  
+        });
+      });
+      document.querySelectorAll('.event-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const data = JSON.parse(this.getAttribute('data-event'));
+          console.log('Event clicked:', data);
+        });
+      });
+    }
+    function getFlag(categoryId) {
+      return "https://upload.wikimedia.org/wikipedia/commons/8/8e/UEFA_logo.png";
+    }
+  </script>
+</body>
+</html>
